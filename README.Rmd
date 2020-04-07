@@ -1,0 +1,85 @@
+---
+title: "pa_3"
+output: github_document
+---
+```{r, load stuff}
+library(tidyverse)
+read_csv("data/vowel_data.csv")
+my_data <- read_csv("data/vowel_data.csv")
+```
+
+# get means and SDs
+```{r, means}
+# get mean for f1_cent
+mean_f1_cent <- mean(my_data$f1_cent)
+# get sd for f1_cent
+sd_f1_cent <- sd(my_data$f1_cent)
+# get mean for f2_cent
+mean_f2_cent <- mean(my_data$f2_cent)
+# get sd for f2_cent
+sd_f2_cent <- sd(my_data$f2_cent)
+```
+
+# get trajectory legth
+```{r, trajectory length}
+# get traj legth for f1
+mutate(my_data, traj_length_f1 = (f1_20) + (f1_35) + (f1_50) + (f1_65) + (f1_80))
+
+# make it an object
+traj_length_f1 <- mutate(my_data, traj_length_f1 = (f1_20) + (f1_35) + (f1_50) + (f1_65) + (f1_80))
+
+# get traj legth for f2
+mutate(my_data, traj_length_f2 = (f2_20) + (f2_35) + (f2_50) + (f2_65) + (f2_80))
+
+# make it an object
+traj_length_f2 <- mutate(my_data, traj_length_f2 = (f2_20) + (f2_35) + (f2_50) + (f2_65) + (f2_80))
+```
+
+
+
+# plot for trajectory length of F1 as a function of vowel and language
+```{r, plot 1}
+traj_length_f1 %>%  
+  ggplot(., aes(x = language, y = traj_length_f1)) +
+    geom_boxplot() +
+    facet_grid(. ~ vowel)
+```
+
+
+# plot for f1 as a function of vowel and language
+```{r, plot 2}
+my_data %>%  
+  ggplot(., aes(x = language, y = f1_cent)) +
+    geom_boxplot() +
+    facet_grid(. ~ vowel)
+```
+
+
+# plot for trajectory legth of F2 as a function of vowel and language
+```{r, plot 3}
+traj_length_f2 %>%  
+  ggplot(., aes(x = language, y = traj_length_f2)) +
+    geom_boxplot() +
+    facet_grid(. ~ vowel)
+```
+
+
+# plot for f2 as a function of vowel and language
+```{r, plot4}
+my_data %>%  
+  ggplot(., aes(x = language, y = f2_cent)) +
+    geom_boxplot() +
+    facet_grid(. ~ vowel)
+```
+
+
+# Question 7
+
+### a. This part of the script calculates the time landmarks of the vowels. It first gets the values of the onset and the offset of the vowels. Then it calculates their duration, by substracting the offset from the onset. The last procedure calculates the five time landmarks by multiplying vowel duration by the five different percentages and then adding the product to vowel onset.
+
+
+### b. The script has three parts. What the first one does is (a) set in which folder the script will store the file that will be generated, (b) name the file, (c) create headers for the different data categories (e.g., id, item, f1_80, etc.). The second part (a) selects the folder from which the .wav and .textgrid files are going to be retrieved, (b) adds a string variable for a personal id. The third part is the most important one. It retrieves the information from the intervals and point tiers (item, vowel, and language) and extracts important information about the vowel (its onset and offset, its duration, and the five time landmarks for both the f1 and the f2). In addition, it calculates spectral centroids (i.e., the sum of all five time landmarks for both formants divided by five). Finally, it prints the results and saves them to the .csv file.
+
+
+### c. This analysis contains more information than the previous one. More specifically, it gets the time landmarks for f1 and f2 and tl besides vowel duration, which is a great advantage for the pa3 segmentation. I don't see a clear disadvantage for the current script/analysis, although it could be argued that getting the zero crossing for vowel onset and offset for each vowel for each item can be tedious.
+
